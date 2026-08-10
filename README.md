@@ -166,3 +166,47 @@ All parsing and calculation happens client-side, in the visitor's own browser. T
 ## Tech
 
 Plain HTML, CSS and JavaScript. No framework, no build tooling. Charting via Chart.js, spreadsheet parsing via PapaParse (CSV) and SheetJS (XLSX), image export via html2canvas.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CMF Lead Conversion Dashboard
+
+A single self-contained HTML page that tracks lead-to-application conversion from a "CMF – deal list" export. Upload a sheet, see the funnel and a monthly breakdown, filter by date range. No server, no build step — everything runs in your browser.
+
+File: cmf-lead-conversion-dashboard.html
+
+Using it
+Open the HTML file in any modern browser (double-click it, or host it somewhere like GitHub Pages).
+Click Upload sheet (or drag a file onto the button) and choose your deal list export — .xlsx, .xls, or .csv.
+The funnel, the monthly table, and the date filters populate automatically.
+To refresh with a new export, just upload again — it replaces the current data.
+
+Nothing is sent anywhere. The file is read and processed entirely in your browser; closing the tab clears it.
+
+What it expects in the sheet
+
+The uploaded file needs a header row with these columns (matching is case-insensitive, so Deal Id and deal id both work):
+
+Column	What it represents
+Deal Id	Unique lead identifier
+Created	When the lead came in
+Converted	Fact find date
+Specifics	Quote date
+Submitted	Application date
+
+Any other columns in the sheet (e.g. Closed At, Closed By, Close Reason, bav) are ignored.
+
+A row counts as a lead if it has both a Deal Id and a Created date. Rows missing either (including trailing blank rows some exports leave at the bottom) are skipped automatically. A stage (Converted / Specifics / Submitted) counts as reached if it has any date in it; a blank cell, or a placeholder date of 1 Jan 2000 or earlier (seen in some exports as a "not reached" marker), counts as not reached.
+
+How the numbers are calculated
+Total leads = count of valid Deal Id rows in the selected date range.
+Fact find / Quote / Application counts and percentages are always calculated against that same total — the original number of leads, not against each other.
+Everything is anchored to Created. The monthly breakdown groups leads by the month they were created, and each month's percentages are against that month's own lead count. A lead created in April but converted in May is still counted as an April lead throughout.
+The date filter (presets or custom range) filters on Created only, and drives both the funnel and the monthly table together.
+Hosting it
+
+It's one HTML file with no dependencies to install, so you can:
+
+Open it directly from disk, or
+Push it to a GitHub repo and serve it with GitHub Pages, or
+Drop it on any static file host.
+
+It loads two small libraries from a CDN (for reading spreadsheets, and for fonts) — an internet connection is needed the first time a page loads them, but no data ever leaves your browser.
