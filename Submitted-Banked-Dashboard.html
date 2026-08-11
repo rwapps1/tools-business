@@ -169,7 +169,7 @@
             <tr>
               <th data-key="name">Adviser</th>
               <th data-key="submissions" class="num">Submissions</th>
-              <th data-key="submittedValue" class="num">Submitted value</th>
+              <th data-key="Value" class="num"> value</th>
               <th id="dynamic-th" data-key="handovers" class="num">Handovers</th>
             </tr>
           </thead>
@@ -191,7 +191,7 @@
   "use strict";
 
   var rows = [];
-  var sortKey = "submittedValue";
+  var sortKey = "Value";
   var sortDir = "desc";
   var chart = null;
   var chartMetric = "submissions";
@@ -270,7 +270,7 @@
       showError("Couldn't find adviser, submissions and net banked columns in that file.");
       return;
     }
-    var submittedValueCol = findCol(headers, ["submitted","value"]);
+    var ValueCol = findCol(headers, ["","value"]);
     var handoversCol = findCol(headers, ["handover"]);
 
     rows = data
@@ -279,7 +279,7 @@
         return {
           name: String(r[adviserCol]).trim(),
           submissions: num(r[submissionsCol]),
-          submittedValue: submittedValueCol ? num(r[submittedValueCol]) : null,
+          Value: submittedValueCol ? num(r[submittedValueCol]) : null,
           handovers: handoversCol ? num(r[handoversCol]) : null,
           netBanked: num(r[netBankedCol])
         };
